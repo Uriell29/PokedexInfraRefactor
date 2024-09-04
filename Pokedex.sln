@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokedexApi", "PokedexApi\PokedexApi.csproj", "{929CAF86-A97B-4D8A-BC89-C679D1F87106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokedexApi.Tests", "PokedexApi.Tests\PokedexApi.Tests.csproj", "{73513877-86D2-47BA-AE97-FE28BE0CFC8D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{929CAF86-A97B-4D8A-BC89-C679D1F87106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{929CAF86-A97B-4D8A-BC89-C679D1F87106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{929CAF86-A97B-4D8A-BC89-C679D1F87106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{929CAF86-A97B-4D8A-BC89-C679D1F87106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73513877-86D2-47BA-AE97-FE28BE0CFC8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73513877-86D2-47BA-AE97-FE28BE0CFC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73513877-86D2-47BA-AE97-FE28BE0CFC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73513877-86D2-47BA-AE97-FE28BE0CFC8D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
