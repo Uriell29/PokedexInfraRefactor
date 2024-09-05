@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 using PokeApiNet;
 
 namespace PokedexAPI_.Models;
@@ -11,12 +12,24 @@ public class PokemonInformation(string name, string description, string habitat,
     public bool IsLegendary { get; set; } = isLegendary;
 
 
-    public static PokemonInformation MapToPokemonInformation(string pokemonName, PokemonSpecies pokemonSpecies) =>
-        new(
+    public static PokemonInformation MapToPokemonInformation(string pokemonName, PokemonSpecies pokemonSpecies)
+    {
+        return new PokemonInformation(
             pokemonName,
-            pokemonSpecies.FlavorTextEntries == null
-                ? null
-                : pokemonSpecies.FlavorTextEntries.FirstOrDefault()?.FlavorText.Replace("\n", "") ?? null,
+            GetDescription(pokemonSpecies),
             pokemonSpecies.Habitat == null ? null : pokemonSpecies.Habitat.Name,
             pokemonSpecies.IsLegendary);
+    }
+
+    private static string? GetDescription(PokemonSpecies pokemonSpecies)
+    {
+        return pokemonSpecies.FlavorTextEntries == null
+            ? null
+            : CleanUpUnicodeCharacters(pokemonSpecies.FlavorTextEntries.FirstOrDefault()?.FlavorText);
+    }
+
+    private static string CleanUpUnicodeCharacters(string sentence)
+    {
+        return Regex.Replace(sentence, @"\p{C}", " ");
+    }
 }
