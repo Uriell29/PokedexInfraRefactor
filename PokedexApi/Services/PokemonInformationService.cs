@@ -11,14 +11,14 @@ public class PokemonInformationService(ILogger<PokemonInformationService> logger
     {
         try
         {
-            var pokemonName = pokeClient.GetResourceAsync<Pokemon>(name).Result.Name;
-            if (pokemonName == null)
+            var pokemon = pokeClient.GetResourceAsync<Pokemon>(name).Result;
+            if (pokemon.Name == null)
             {
                 logger.LogInformation("Pokemon with name {name} not found", name);
                 return null;
             }
-            var pokemonSpecies = pokeClient.GetResourceAsync<PokemonSpecies>(pokemonName).Result;
-            return PokemonInformation.MapToPokemonInformation(pokemonName, pokemonSpecies);
+            var pokemonSpecies = pokeClient.GetResourceAsync<PokemonSpecies>(pokemon.Species.Name).Result;
+            return PokemonInformation.MapToPokemonInformation(pokemon.Name, pokemonSpecies);
         }
         catch (Exception e)
         {

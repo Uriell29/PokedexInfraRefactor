@@ -15,7 +15,7 @@ public class PokemonInformation(string name, string description, string habitat,
     public static PokemonInformation MapToPokemonInformation(string pokemonName, PokemonSpecies pokemonSpecies) =>
         new(
             pokemonName, 
-            pokemonSpecies.FormDescriptions == null ? null : pokemonSpecies.FormDescriptions.FirstOrDefault()?.Description ?? null,
+            pokemonSpecies.FlavorTextEntries == null ? null : pokemonSpecies.FlavorTextEntries.FirstOrDefault()?.FlavorText.Replace("\n", "") ?? null,
             pokemonSpecies.Habitat == null ? null : pokemonSpecies.Habitat.Name,
             pokemonSpecies.IsLegendary);
 }
