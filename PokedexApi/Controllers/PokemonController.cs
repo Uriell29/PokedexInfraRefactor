@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using PokeApiNet;
 using PokedexAPI_.Models;
 using PokedexAPI_.Services;
 
@@ -7,7 +6,8 @@ namespace PokedexAPI_.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PokemonController(ILogger<PokemonController> logger, IPokemonInformationService pokemonInformationService) : ControllerBase
+public class PokemonController(ILogger<PokemonController> logger, IPokemonInformationService pokemonInformationService)
+    : ControllerBase
 {
     [HttpGet("{name}")]
     [ProducesResponseType<PokemonInformation>(StatusCodes.Status200OK)]

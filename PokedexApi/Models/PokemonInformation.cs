@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 using PokeApiNet;
 
 namespace PokedexAPI_.Models;
@@ -14,8 +13,10 @@ public class PokemonInformation(string name, string description, string habitat,
 
     public static PokemonInformation MapToPokemonInformation(string pokemonName, PokemonSpecies pokemonSpecies) =>
         new(
-            pokemonName, 
-            pokemonSpecies.FlavorTextEntries == null ? null : pokemonSpecies.FlavorTextEntries.FirstOrDefault()?.FlavorText.Replace("\n", "") ?? null,
+            pokemonName,
+            pokemonSpecies.FlavorTextEntries == null
+                ? null
+                : pokemonSpecies.FlavorTextEntries.FirstOrDefault()?.FlavorText.Replace("\n", "") ?? null,
             pokemonSpecies.Habitat == null ? null : pokemonSpecies.Habitat.Name,
             pokemonSpecies.IsLegendary);
 }

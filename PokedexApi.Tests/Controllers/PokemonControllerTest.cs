@@ -10,7 +10,6 @@ namespace PokedexApi.Tests;
 
 public class PokemonControllerTest
 {
-    
     private readonly Mock<ILogger<PokemonController>> _mockLogger;
     private readonly Mock<IPokemonInformationService> _mockPokemonService;
     private readonly PokemonController _sut;
@@ -21,7 +20,7 @@ public class PokemonControllerTest
         _mockPokemonService = new Mock<IPokemonInformationService>();
         _sut = new PokemonController(_mockLogger.Object, _mockPokemonService.Object);
     }
-    
+
     [Fact]
     public void ShouldReturnHttpOkAndPokemonInformationIfPokemonExists()
     {
@@ -32,7 +31,7 @@ public class PokemonControllerTest
             .Returns(pokemon);
         //Act
         var result = _sut.GetPokemonInformation("name") as OkObjectResult;
-        
+
         //Assert
         Assert.Equal(200, result.StatusCode);
         result.Value.Should().BeEquivalentTo(expectedResult);
@@ -43,7 +42,7 @@ public class PokemonControllerTest
     {
         _mockPokemonService.Setup(m => m.GetPokemonByName(It.IsAny<string>()))
             .Returns((PokemonInformation)null);
-        
+
         var result = _sut.GetPokemonInformation("name") as NotFoundResult;
         Assert.Equal(404, result.StatusCode);
     }
