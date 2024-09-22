@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using PokedexAPI_.Models;
 using PokedexAPI_.Services;
@@ -10,7 +9,7 @@ namespace PokedexAPI_.Controllers;
 public class PokemonController(ILogger<PokemonController> logger, IPokemonInformationService pokemonInformationService)
     : ControllerBase
 {
-    [HttpGet("{name}")]
+    [HttpGet("{name?}")]
     [ProducesResponseType<PokemonInformation>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -31,7 +30,7 @@ public class PokemonController(ILogger<PokemonController> logger, IPokemonInform
         }
     }
 
-    [HttpGet("translated/{name}")]
+    [HttpGet("translated/{name?}")]
     [ProducesResponseType<PokemonInformation>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

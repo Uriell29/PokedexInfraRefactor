@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using PokeApiNet;
 using PokedexAPI_.Models;
 using PokedexAPI_.Services;
 
@@ -55,7 +54,20 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
-    
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("  ")]
+    public async Task GetPokemonInformation_ShouldReturnBadRequest_WhenNameIsInvalid(string invalidName)
+    {
+        // Act
+        var response = await _client.GetAsync($"/api/v1/pokemon/{invalidName}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
 
     [Fact]
     public async Task GetTranslatedPokemonInformation_ShouldReturnOk_WithTranslatedInformation()
@@ -73,7 +85,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         Assert.Equal(pokemonName, pokemon.Name);
         Assert.NotNull(pokemon.Description);
     }
-    
+
     [Fact]
     public async Task GetTranslatedPokemonInformation_ShouldReturnNotFound_WhenPokemonDoesNotExist()
     {
@@ -86,7 +98,20 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
-    
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("  ")]
+    public async Task GetTranslatedPokemonInformation_ShouldReturnBadRequest_WhenNameIsInvalid(string invalidName)
+    {
+        // Act
+        var response = await _client.GetAsync($"/api/v1/pokemon/translated/{invalidName}");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
     [Fact]
     public async Task GetPokemonInformation_ShouldReturnInternalServerError_WhenServiceThrowsException()
     {
