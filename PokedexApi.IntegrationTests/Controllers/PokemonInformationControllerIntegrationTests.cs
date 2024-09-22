@@ -32,7 +32,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
     public async Task GetPokemonInformation_ShouldReturnsOk_WithPokemonInformation(string pokemonName)
     {
         // Act
-        var response = await _client.GetAsync($"/api/pokemon/{pokemonName}");
+        var response = await _client.GetAsync($"/api/v1/pokemon/{pokemonName}");
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -50,7 +50,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         var pokemonName = "NotFound";
 
         // Act
-        var response = await _client.GetAsync($"/api/pokemon/{pokemonName}");
+        var response = await _client.GetAsync($"/api/v1/pokemon/{pokemonName}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -64,7 +64,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         var pokemonName = "mewtwo";
 
         //Act
-        var response = await _client.GetAsync($"/api/pokemon/translated/{pokemonName}");
+        var response = await _client.GetAsync($"/api/v1/pokemon/translated/{pokemonName}");
 
         //Assert
         response.EnsureSuccessStatusCode();
@@ -81,7 +81,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         var pokemonName = "nonexistent";
 
         // Act
-        var response = await _client.GetAsync($"/api/pokemon/translated/{pokemonName}");
+        var response = await _client.GetAsync($"/api/v1/pokemon/translated/{pokemonName}");
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
@@ -106,7 +106,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
         }).CreateClient();
 
         // Act
-        var response = await clientWithException.GetAsync($"/api/pokemon/{pokemonName}");
+        var response = await clientWithException.GetAsync($"/api/v1/pokemon/{pokemonName}");
 
         // Assert
         Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);

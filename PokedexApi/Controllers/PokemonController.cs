@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using PokedexAPI_.Models;
 using PokedexAPI_.Services;
@@ -5,7 +6,7 @@ using PokedexAPI_.Services;
 namespace PokedexAPI_.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class PokemonController(ILogger<PokemonController> logger, IPokemonInformationService pokemonInformationService)
     : ControllerBase
 {
