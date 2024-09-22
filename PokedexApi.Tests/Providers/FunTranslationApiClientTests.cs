@@ -67,16 +67,18 @@ public class FunTranslationApiClientTests
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>()
             )
-            .ThrowsAsync(new HttpRequestException("Network error"));
+            .ThrowsAsync(new FunTranslationApiException("An unexpected error occurred while getting yoda translation."));
 
         // Act & Assert
-        await Assert.ThrowsAsync<FunTranslationApiException>(() => _client.GetYodaTranslationAsync(sourceDescription));
+        await Assert.ThrowsAsync<FunTranslationApiException>(() =>
+            _client.GetYodaTranslationAsync(sourceDescription));
+        
         _loggerMock.Verify(
             x => x.Log(
-                It.Is<LogLevel>(l => l == LogLevel.Error),
+                LogLevel.Error,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>(
-                    (v, t) => v.ToString().Contains("An error occurred while getting yoda translation.")),
+                It.Is<It.IsAnyType>((v, t) =>
+                    v.ToString().Contains("An unexpected error occurred while getting yoda translation.")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ),
@@ -85,7 +87,7 @@ public class FunTranslationApiClientTests
     }
 
     [Fact]
-    public async Task GetShakespeareTranslation_ReturnsTranslatedText_WhenApiResponseIsValid()
+    public async Task GetShakespeareTranslation_ShouldReturnTranslatedText_WhenApiResponseIsValid()
     {
         // Arrange
         var sourceDescription = "Test description";
@@ -102,7 +104,7 @@ public class FunTranslationApiClientTests
     }
 
     [Fact]
-    public async Task GetShakespeareTranslation_ReturnsDefaultMessage_WhenTranslationNotAvailable()
+    public async Task GetShakespeareTranslation_ShouldReturnDefaultMessage_WhenTranslationNotAvailable()
     {
         // Arrange
         var sourceDescription = "Test description";
@@ -129,18 +131,18 @@ public class FunTranslationApiClientTests
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>()
             )
-            .ThrowsAsync(new HttpRequestException("Network error"));
+            .ThrowsAsync(new FunTranslationApiException("An unexpected error occurred while getting shakespeare translation."));
 
         // Act & Assert
         await Assert.ThrowsAsync<FunTranslationApiException>(() =>
             _client.GetShakespeareTranslationAsync(sourceDescription));
-
+    
         _loggerMock.Verify(
             x => x.Log(
-                It.Is<LogLevel>(l => l == LogLevel.Error),
+                LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) =>
-                    v.ToString().Contains("An error occurred while getting shakespeare translation.")),
+                    v.ToString().Contains("An unexpected error occurred while getting shakespeare translation.")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()
             ),
