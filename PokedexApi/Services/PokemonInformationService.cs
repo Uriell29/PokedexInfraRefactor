@@ -1,6 +1,8 @@
 using PokeApiNet;
+using PokedexAPI_.Contexts;
 using PokedexAPI_.Models;
 using PokedexAPI_.Providers;
+using PokedexAPI_.Strategies;
 
 namespace PokedexAPI_.Services;
 
@@ -31,16 +33,9 @@ public class PokemonInformationService(
             if (pokemonInformation is null)
                 return null;
 
-            string translatedDescription;
-            try
-            {
-                translatedDescription = await GetTranslatedDescriptionAsync(pokemonInformation);
-            }
-            catch (FunTranslationApiException ex)
-            {
-                logger.LogError(ex, "Translation API failed for Pokémon {Name}. Returning standard description.", name);
+            var translatedDescription = await GetTranslatedDescriptionAsync(pokemonInformation, name);
+            if (translatedDescription is null)
                 return pokemonInformation;
-            }
 
             return new PokemonInformation(
                 pokemonInformation.Name,
@@ -50,26 +45,17 @@ public class PokemonInformationService(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "An error occurred while retrieving translated Pokémon {Name}.", name);
+            logger.LogError(e, "An error occurred while getting Pokémon {Name}.", name);
             return null;
         }
     }
-
-    private async Task<string> GetTranslatedDescriptionAsync(PokemonInformation pokemonInfo)
-    {
-        if (pokemonInfo.IsLegendary || pokemonInfo.Habitat == "cave")
-            return await funTranslationApiClient.GetYodaTranslationAsync(pokemonInfo.Description);
-
-        return await funTranslationApiClient.GetShakespeareTranslationAsync(pokemonInfo.Description);
-    }
-
 
     private async Task<PokemonInformation?> BuildPokemonInformationAsync(string name)
     {
         try
         {
             var pokemon = await pokeClient.GetResourceAsync<Pokemon>(name);
-            if (pokemon?.Name == null)
+            if (pokemon.Name == null)
             {
                 logger.LogInformation("Pokemon with name {Name} not found", name);
                 return null;
@@ -83,5 +69,29 @@ public class PokemonInformationService(
             logger.LogError(e, "Error building Pokémon information for {Name}", name);
             return null;
         }
+    }
+
+    private async Task<string?> GetTranslatedDescriptionAsync(PokemonInformation pokemonInfo, string name)
+    {
+        var translationContext = new TranslationContext();
+        SetTranslationStrategy(pokemonInfo, translationContext);
+
+        try
+        {
+            return await translationContext.TranslateDescriptionAsync(pokemonInfo.Description);
+        }
+        catch (FunTranslationApiException e)
+        {
+            logger.LogError(e, "Translation API failed for Pokémon {Name}. Returning standard description.", name);
+            return null;
+        }
+    }
+
+    private void SetTranslationStrategy(PokemonInformation pokemonInfo, TranslationContext context)
+    {
+        if (pokemonInfo.IsLegendary || pokemonInfo.Habitat == "cave")
+            context.SetTranslationStrategy(new YodaTranslationStrategy(funTranslationApiClient));
+        else
+            context.SetTranslationStrategy(new ShakespeareTranslationStrategy(funTranslationApiClient));
     }
 }
