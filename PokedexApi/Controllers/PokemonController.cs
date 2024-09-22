@@ -16,10 +16,10 @@ public class PokemonController(ILogger<PokemonController> logger, IPokemonInform
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetPokemonInformationAsync(string name)
     {
+        if (string.IsNullOrWhiteSpace(name)) return BadRequest("Pokemon name is required.");
+
         try
         {
-            if (string.IsNullOrWhiteSpace(name)) return BadRequest("Pokemon name is required.");
-
             var pokemon = await pokemonInformationService.GetPokemonByNameAsync(name);
             return pokemon == null ? NotFound() : Ok(pokemon);
         }
@@ -31,13 +31,16 @@ public class PokemonController(ILogger<PokemonController> logger, IPokemonInform
     }
 
     [HttpGet("translated/{name}")]
-    [ProducesResponseType<string>(StatusCodes.Status200OK)]
+    [ProducesResponseType<PokemonInformation>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetTranslatedPokemonInformationAsync(string name)
     {
+        if (string.IsNullOrWhiteSpace(name)) return BadRequest("Pokemon name is required.");
+
         try
         {
-            if (string.IsNullOrWhiteSpace(name)) return BadRequest("Pokemon name is required.");
-
             var pokemon = await pokemonInformationService.GetPokemonWithTranslatedDescriptionByNameAsync(name);
             return pokemon == null ? NotFound() : Ok(pokemon);
         }
