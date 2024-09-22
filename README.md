@@ -14,39 +14,32 @@ It is built using .NET 8 and follows RESTful conventions.
 
 1. Clone the repository:
 
-   `git clone `
+   `git clone https://github.com/Uriell29/PokedexApi.git`
 
    `cd PokedexApi`
 2. Install the required dependencies:
 
-   `   dotnet restore
-   `
+   `dotnet restore`
 3. Run the API:
 
-   `dotnet run
-   `
+   `dotnet run --project ./PokedexApi/PokedexApi.csproj`
 4. The API will be available at http://localhost:5000.
 
 ## Running the tests
 
 1. Restore the required packages:
-
    `dotnet restore`
 2. Run all tests (unit and integration):
-
    `dotnet test`
 3. The test results will be displayed in the console.
 
 ## Running the API with Docker
 
-1. Make sure Docker is installed and running on your machine.
+1. Make sure Docker is installed and Docker daemon is running on your machine.
 2. Build the Docker image:
-
    `docker build -t pokedexapi -f PokedexApi/Dockerfile .`
 3. Run the Docker container:
-
-   `docker run -d -p 8080:8080 -p 8081:8081 pokedexapi
-   `
+   `docker run --name pokedexapi -d -p 8080:8080 -p 8081:8081 pokedexapi`
 4. The API will be available at http://localhost:8080/
 
 ## API Endpoints
@@ -65,8 +58,13 @@ It is built using .NET 8 and follows RESTful conventions.
 
 GET /api/v1/pokemon/pikachu
 
-`curl -i -H 'Accept: application/json' http://localhost:5000/api/v1/pokemon/pikachu
-`
+**When running on IDE**
+
+`curl -i -H 'Accept: application/json' http://localhost:5000/api/v1/pokemon/pikachu`
+
+**When running on Docker**
+
+`curl -i -H 'Accept: application/json' http://localhost:8080/api/v1/pokemon/pikachu`
 
 #### Response
 
@@ -96,7 +94,13 @@ GET /api/v1/pokemon/pikachu
 
 GET /api/v1/pokemon/translated/pikachu
 
+**When running on IDE**
+
 `curl -i -H 'Accept: application/json' http://localhost:5000/api/v1/pokemon/translated/pikachu`
+
+**When running on Docker**
+
+`curl -i -H 'Accept: application/json' http://localhost:8080/api/v1/pokemon/translated/pikachu`
 
 #### Response
 
@@ -117,7 +121,7 @@ Content-Length: 255
 Swagger UI provides a visual interface to explore and test the API.
 
 1. Run the API locally or in Docker.
-2. Open your browser and navigate to https://localhost:5000/swagger (if running locally from IDE)
-   or http://localhost:8080/swagger (if running from Docker container).
+2. Open your browser and navigate to https://localhost:5000/swagger (only for development environment).
+
 
 
