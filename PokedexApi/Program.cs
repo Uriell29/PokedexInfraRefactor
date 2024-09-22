@@ -1,20 +1,20 @@
-using PokedexAPI_.Services;
 using PokeApiNet;
 using PokedexAPI_.Providers;
+using PokedexAPI_.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<PokeApiClient>();
+builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddScoped<IPokemonApiClient, PokemonApiClientWrapper>();
+builder.Services.AddScoped<IFunTranslationApiClient, FunTranslationApiClient>();
 builder.Services.AddScoped<IPokemonInformationService, PokemonInformationService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

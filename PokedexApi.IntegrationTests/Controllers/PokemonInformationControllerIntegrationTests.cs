@@ -9,8 +9,8 @@ namespace PokedexApi.IntegrationTests;
 
 public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
     private readonly HttpClient _client;
+    private readonly WebApplicationFactory<Program> _factory;
 
     public PokemonInformationControllerIntegrationTests(WebApplicationFactory<Program> factory)
     {
@@ -23,7 +23,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
     }
 
     [Fact]
-    public async Task ShouldReturnsOk_WithPokemonInformation()
+    public async Task PokemonInformation_ShouldReturnsOk_WithPokemonInformation()
     {
         // Arrange
         var pokemonName = "pikachu";
@@ -41,7 +41,7 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
     }
 
     [Fact]
-    public async Task ShouldReturnsNotFound()
+    public async Task PokemonInformation_ShouldReturnsNotFound()
     {
         // Arrange
         var pokemonName = "NotFound";
@@ -51,5 +51,16 @@ public class PokemonInformationControllerIntegrationTests : IClassFixture<WebApp
 
         // Assert
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task TranslatedPokemonInformation_ShouldReturnsOk_WithPokemonInformation()
+    {
+        var pokemonName = "mewtwo";
+
+        var response = await _client.GetAsync($"/api/pokemon/translated/{pokemonName}");
+
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }

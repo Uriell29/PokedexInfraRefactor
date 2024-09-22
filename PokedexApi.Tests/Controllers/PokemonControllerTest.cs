@@ -22,15 +22,14 @@ public class PokemonControllerTest
     }
 
     [Fact]
-    public void ShouldReturnHttpOkAndPokemonInformationIfPokemonExists()
+    public async Task GetPokemonInformation_ShouldReturnHttpOkAndPokemonInformation_WhenPokemonExists()
     {
         //Arrange
         var expectedResult = new PokemonInformation("name", "description", "habitat", false);
-        var pokemon = new PokemonInformation("name", "description", "habitat", false);
-        _mockPokemonService.Setup(m => m.GetPokemonByName(It.IsAny<string>()))
-            .Returns(pokemon);
+        _mockPokemonService.Setup(m => m.GetPokemonByNameAsync(It.IsAny<string>()))
+            .ReturnsAsync(expectedResult);
         //Act
-        var result = _sut.GetPokemonInformation("name") as OkObjectResult;
+        var result = await _sut.GetPokemonInformationAsync("name") as OkObjectResult;
 
         //Assert
         Assert.Equal(200, result.StatusCode);
@@ -38,19 +37,65 @@ public class PokemonControllerTest
     }
 
     [Fact]
-    public void ShouldReturnHttpNotFoundIfPokemonDoesNotExist()
+    public async Task GetPokemonInformation_ShouldReturnHttpNotFound_WhenPokemonDoesNotExist()
     {
-        _mockPokemonService.Setup(m => m.GetPokemonByName(It.IsAny<string>()))
-            .Returns((PokemonInformation)null);
+        _mockPokemonService.Setup(m => m.GetPokemonByNameAsync(It.IsAny<string>()))
+            .ReturnsAsync((PokemonInformation)null);
 
-        var result = _sut.GetPokemonInformation("name") as NotFoundResult;
+        var result = await _sut.GetPokemonInformationAsync("name") as NotFoundResult;
         Assert.Equal(404, result.StatusCode);
     }
 
     [Fact]
-    public void ShouldReturnBadRequest_IfNameParameterIsMissing()
+    public async Task GetPokemonInformation_ShouldReturnBadRequest_WhenNameParameterIsMissing()
     {
-        var result = _sut.GetPokemonInformation(null) as BadRequestResult;
+        var result = await _sut.GetPokemonInformationAsync(null) as BadRequestResult;
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetPokemonInformation_ShouldReturnHttpInternalServerError_WhenExceptionIsThrown()
+    {
+        _mockPokemonService.Setup(m => m.GetPokemonByNameAsync(It.IsAny<string>()))
+            .ThrowsAsync(new Exception("Test exception"));
+
+        var result = await _sut.GetPokemonInformationAsync("name") as ObjectResult;
+        Assert.Equal(500, result.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetTranslatedPokemonInformation_ShouldReturnHttpOkAndPokemonInformation_WhenPokemonExists()
+    {
+        //Arrange
+        var expectedResult = new PokemonInformation("name", "description", "habitat", false);
+        var pokemon = new PokemonInformation("name", "description", "habitat", false);
+        _mockPokemonService.Setup(m => m.GetPokemonWithTranslatedDescriptionByNameAsync(It.IsAny<string>()))
+            .ReturnsAsync(pokemon);
+        //Act
+        var result = await _sut.GetTranslatedPokemonInformationAsync("name") as OkObjectResult;
+
+        //Assert
+        Assert.Equal(200, result.StatusCode);
+        result.Value.Should().BeEquivalentTo(expectedResult);
+    }
+
+    [Fact]
+    public async Task GetTranslatedPokemonInformation_ShouldReturnHttpNotFound_WhenPokemonDoesNotExist()
+    {
+        _mockPokemonService.Setup(m => m.GetPokemonWithTranslatedDescriptionByNameAsync(It.IsAny<string>()))
+            .ReturnsAsync((PokemonInformation?)null);
+
+        var result = await _sut.GetTranslatedPokemonInformationAsync("name") as NotFoundResult;
+        Assert.Equal(404, result.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetTranslatedPokemonInformation_ShouldReturnHttpInternalServerError_WhenExceptionIsThrown()
+    {
+        _mockPokemonService.Setup(m => m.GetPokemonWithTranslatedDescriptionByNameAsync(It.IsAny<string>()))
+            .ThrowsAsync(new Exception("Test exception"));
+
+        var result = await _sut.GetTranslatedPokemonInformationAsync("name") as ObjectResult;
+        Assert.Equal(500, result.StatusCode);
     }
 }

@@ -14,21 +14,36 @@ public class PokemonController(ILogger<PokemonController> logger, IPokemonInform
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public IActionResult GetPokemonInformation(string name)
+    public async Task<IActionResult> GetPokemonInformationAsync(string name)
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return BadRequest("Pokemon name is required.");
-            }
+            if (string.IsNullOrWhiteSpace(name)) return BadRequest("Pokemon name is required.");
 
-            var pokemon = pokemonInformationService.GetPokemonByName(name);
+            var pokemon = await pokemonInformationService.GetPokemonByNameAsync(name);
             return pokemon == null ? NotFound() : Ok(pokemon);
         }
         catch (Exception e)
         {
             logger.LogError(e, "An error occurred while retrieving pokemon.");
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpGet("translated/{name}")]
+    [ProducesResponseType<string>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTranslatedPokemonInformationAsync(string name)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(name)) return BadRequest("Pokemon name is required.");
+
+            var pokemon = await pokemonInformationService.GetPokemonWithTranslatedDescriptionByNameAsync(name);
+            return pokemon == null ? NotFound() : Ok(pokemon);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "An error occurred while retrieving pokemon with translated description.");
             return StatusCode(500, "Internal server error");
         }
     }

@@ -4,5 +4,7 @@ namespace PokedexAPI_.Services;
 
 public interface IPokemonInformationService
 {
-    PokemonInformation GetPokemonByName(string name);
+    Task<PokemonInformation?> GetPokemonByNameAsync(string name);
+
+    Task<PokemonInformation?> GetPokemonWithTranslatedDescriptionByNameAsync(string name);
 }
