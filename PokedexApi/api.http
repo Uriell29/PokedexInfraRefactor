@@ -1,6 +1,33 @@
-@api_HostAddress = http://localhost:5267
+@api_HostAddress = http://localhost:5000
 
-GET {{api_HostAddress}}/weatherforecast/
+### pikachu
+GET {{api_HostAddress}}/api/v1/Pokemon/pikachu/
 Accept: application/json
 
-###
+### mewtwo
+GET {{api_HostAddress}}/api/v1/Pokemon/mewtwo/
+Accept: application/json
+
+### 400
+GET {{api_HostAddress}}/api/v1/Pokemon/
+Accept: application/json
+
+### DoesntExist
+GET {{api_HostAddress}}/api/v1/Pokemon/DoesntExist
+Accept: application/json
+
+### Translated Mewtwo
+GET {{api_HostAddress}}/api/v1/Pokemon/translated/mewtwo/
+Accept: application/json
+
+### Translated Pikachu
+GET {{api_HostAddress}}/api/v1/Pokemon/translated/pikachu/
+Accept: application/json
+
+### Translated 400
+GET {{api_HostAddress}}/api/v1/Pokemon/translated/
+Accept: application/json
+
+### Translated 404
+GET {{api_HostAddress}}/api/v1/Pokemon/translated/DoesNotExist
+Accept: application/json
