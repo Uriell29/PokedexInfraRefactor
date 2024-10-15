@@ -5,7 +5,7 @@ name: Run Integrations Tests on a Schedule
 
 on:
   schedule:
-  - cron: "5 20 * * 2"
+  - cron: "5 22 * * 2"
 
 jobs:
   build:
